@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+</head>
+<body class="bg-light">
+
+<div id="editModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-semibold">Edit user</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editForm" method="post">
+                <!--                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+                <div class="modal-body d-flex flex-column m-auto w-50">
+                    <label class="w-100">
+                        <span class="d-block fw-semibold text-center">ID</span>
+                        <input name="id"
+                               class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2 pe-none"
+                               type="text" readonly/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">First Name</span>
+                        <input name="firstName" class="form-control text-body mb-0 mt-1 w-100 ps-2" type="text"
+                               required/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">Last Name</span>
+                        <input name="lastName" class="form-control text-body mb-0 mt-1 w-100 ps-2" type="text"
+                               required/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">Age</span>
+                        <input name="age" class="form-control text-body mb-0 mt-1 w-100 ps-2" type="text"
+                               required/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">Email</span>
+                        <input name="email" class="form-control text-body mb-0 mt-1 w-100 ps-2" type="email"
+                               required/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">Password</span>
+                        <input class="form-control text-body mb-0 mt-1 w-100 ps-2" type="password"
+                               required/>
+                    </label>
+
+                    <label class="mt-3 mb-0 w-100">
+                        <span class="d-block fw-semibold text-center">Role</span>
+                        <select name="role" class="form-control w-100 ps-2 mt-1 mb-0" multiple required>
+                        </select>
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-semibold">Delete user</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form id="deleteForm" method="post">
+                <!--                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+
+                <div class="modal-body d-flex flex-column m-auto w-50">
+                    <label class="w-100">
+                        <span class="d-block fw-semibold text-center">ID</span>
+                        <input type="hidden"/>
+                        <input name="id"
+                               class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2 pe-none"
+                               type="text" readonly/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">First Name</span>
+                        <input name="firstName"
+                               class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2 pe-none"
+                               type="text" readonly/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">Last Name</span>
+                        <input name="lastName"
+                               class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2 pe-none"
+                               type="text" readonly/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">Age</span>
+                        <input name="age"
+                               class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2 pe-none"
+                               type="text" readonly/>
+                    </label>
+
+                    <label class="mt-3 w-100">
+                        <span class="d-block fw-semibold text-center">Email</span>
+                        <input name="email"
+                               class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2 pe-none"
+                               type="email" readonly/>
+                    </label>
+
+                    <label class="mt-3 mb-0 w-100">
+                        <span class="d-block fw-semibold text-center">Role</span>
+                        <select name="role" class="form-control bg-body-secondary w-100 ps-2 mt-1 mb-0 pe-none"
+                                multiple>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<header class="navbar bg-dark">
+    <p id="headerRoles" class="ms-3 text-white m-0">
+        <span id="headerEmail" class="fw-bolder"></span>
+        with roles:<span id="headerRole" class="ms-1"></span>
+    </p>
+    <a th:href="@{/logout}" class="text-secondary text-decoration-none me-3">Logout</a>
+</header>
+
+<main class="d-flex w-100 bg-light">
+    <nav class="nav nav-pills flex-nowrap flex-column w-25 min-vh-100 mt-2 bg-body" role="tablist">
+        <a class="nav-link btn w-100 ps-3 text-start border-0 active"
+           data-bs-toggle="tab" href="#admin">Admin</a>
+        <a class="nav-link btn w-100 ps-3 text-start border-0"
+           data-bs-toggle="tab" href="#user">User</a>
+    </nav>
+    <div class="tab-content w-75 p-4 pt-3">
+        <div class="tab-pane fade show active" id="admin">
+            <h1 class="fw-semibold">Admin panel</h1>
+            <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button data-user-table class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                            data-bs-target="#home-tab-pane"
+                            type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Users Table
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button data-add-user-button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                            data-bs-target="#profile-tab-pane"
+                            type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">New User
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                     tabindex="0">
+                    <div class="border">
+                        <h4 class="fw-semibold mb-0 p-3 ms-2">All users</h4>
+                    </div>
+
+                    <div id="usersBlock" class="border bg-body p-4"></div>
+                </div>
+                <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                     tabindex="0">
+                    <div class="border">
+                        <h4 class="fw-semibold mb-0 p-3 ms-2">Add new user</h4>
+                    </div>
+                    <div class="border d-flex justify-content-center bg-body p-4">
+                        <form id="addForm" class="d-flex flex-column w-50" method="post"
+                        >
+                            <label class="w-100">
+                                <span class="d-block fw-semibold text-center">First name</span>
+                                <input name="firstName"
+                                       class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2"
+                                       type="text" required/>
+                            </label>
+
+                            <label class="w-100">
+                                <span class="d-block fw-semibold text-center">Last name</span>
+                                <input name="lastName"
+                                       class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2"
+                                       type="text" required/>
+                            </label>
+
+                            <label class="w-100">
+                                <span class="d-block fw-semibold text-center">Age</span>
+                                <input name="age"
+                                       class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2"
+                                       type="text" required/>
+                            </label>
+
+                            <label class="w-100">
+                                <span class="d-block fw-semibold text-center">Email</span>
+                                <input name="email"
+                                       class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2"
+                                       type="email" required/>
+                            </label>
+
+                            <label class="w-100">
+                                <span class="d-block fw-semibold text-center">Password</span>
+                                <input
+                                        class="form-control bg-body-secondary text-body-secondary mb-0 mt-1 w-100 ps-2"
+                                        type="password" required/>
+                            </label>
+
+                            <label class="mt-3 mb-0 w-100">
+                                <span class="d-block fw-semibold text-center">Role</span>
+                                <select name="role" class="form-control w-100 ps-2 mt-1 mb-0" multiple>
+                                </select>
+                            </label>
+
+                            <button class="btn btn-success w-50 m-auto mt-3">Add new user</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="user">
+            <h1 class="fw-semibold">User information-page</h1>
+            <div class="border mt-3">
+                <h4 class="fw-semibold mb-0 p-3 ms-2">About user</h4>
+            </div>
+            <div class="border bg-body p-4">
+                <div class="d-flex align-items-center border-top p-3 ps-2">
+                    <h5 class="mb-0 fw-semibold col-1">ID</h5>
+                    <h5 class="mb-0 fw-semibold col-2">First Name</h5>
+                    <h5 class="mb-0 fw-semibold col-2">Last Name</h5>
+                    <h5 class="mb-0 fw-semibold col-1">Age</h5>
+                    <h5 class="mb-0 fw-semibold col-2">Email</h5>
+                    <h5 class="mb-0 fw-semibold col">Role</h5>
+                </div>
+                <div class="d-flex align-items-center border-top p-3 ps-2">
+                    <p class="mb-0 col-1" id="userInfoId"></p>
+                    <p class="mb-0 col-2" id="userInfoFirstName"></p>
+                    <p class="mb-0 col-2" id="userInfoLastName"></p>
+                    <p class="mb-0 col-1" id="userInfoAge"></p>
+                    <p class="mb-0 col-2 text-break" id="userInfoEmail"></p>
+                    <p class="mb-0 col text-break" id="userInfoRoles">
+                        <!--                        <span class="me-2"></span>-->
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="/scripts/bootstrap.min.js"></script>
+<script src="/scripts/admin.js" type="module"></script>
+</body>
+</html>
