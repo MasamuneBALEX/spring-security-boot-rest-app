@@ -19,21 +19,25 @@ function renderCurrentUser(user) {
     headerEmail.textContent = user.email;
 
     roles = [];
-    user.roles.forEach(role => {
-        roles.push(role.roleName);
-    });
+    if (user.roles.length > 1) {
+        user.roles.forEach(role => {
+            roles.push(role.roleName);
+        });
+    } else {
+        roles = user.roles;
+    }
 
     let headerRoles = document.getElementById("headerRole");
+    const headerRolesBlock = document.getElementById("headerRoles");
     if (roles.length > 1) {
-        const headerRolesBlock = document.getElementById("headerRoles"),
-            newSpanElement = document.createElement("span");
+        const newSpanElement = document.createElement("span");
         newSpanElement.id = "headerRole";
         headerRolesBlock.append(newSpanElement);
         headerRoles = document.querySelectorAll("#headerRole");
         headerRoles[0].textContent = roles[0];
         headerRoles[1].textContent = roles[1];
     } else {
-        headerRoles.innerText = roles[0];
+        headerRoles.innerText = roles[0].roleName;
     }
     /*Header*/
 
@@ -68,11 +72,19 @@ function renderCurrentUser(user) {
         userInfoAge.textContent = user.age;
         userInfoEmail.textContent = user.email;
 
-        for (let i = 0; i < roles.length; i++) {
-            const role = document.createElement("span");
-            role.classList.add("me-2");
-            role.innerText = roles[i];
-            userInfoRoles.append(role);
+        // console.log(roles);
+        if (userInfoRoles.children.length === 0) {
+            for (let i = 0; i < roles.length; i++) {
+                const role = document.createElement("span");
+                role.classList.add("me-2");
+                if (roles.length === 1) {
+                    role.innerText = roles[i].roleName;
+                } else {
+                    role.innerText = roles[i];
+                }
+
+                userInfoRoles.append(role);
+            }
         }
     }
 }

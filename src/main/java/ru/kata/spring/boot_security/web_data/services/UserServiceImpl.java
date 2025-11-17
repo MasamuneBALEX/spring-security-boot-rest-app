@@ -41,23 +41,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
-        User lastUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
-
-        if (user.getPassword() != null && !user.getPassword().isBlank()) {
-            if (!passwordEncoder.matches(user.getPassword(), lastUser.getPassword())) {
-                lastUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            }
+        if (userRepository.findById(user.getId()).isPresent()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
         }
-
-        lastUser.setFirstName(user.getFirstName());
-        lastUser.setSurname(user.getSurname());
-        lastUser.setAge(user.getAge());
-        lastUser.setEmail(user.getEmail());
-        System.out.println("User Roles is " + user.getRoles());
-        lastUser.setRoles(user.getRoles());
-
-        userRepository.save(lastUser);
     }
 
     @Override

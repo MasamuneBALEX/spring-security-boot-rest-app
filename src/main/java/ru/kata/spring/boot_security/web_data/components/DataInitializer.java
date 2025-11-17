@@ -32,13 +32,13 @@ public class DataInitializer {
         roleService.saveRole(admin);
         roleService.saveRole(user);
 
-        User userAdmin = new User("Aleksandr", "Belov", 22, "Lonodn",
-                "Admin", "12345", "aleks_test@mail.ru",
-                new HashSet<>(Set.of(user, admin)));
-
         User userUser = new User("Aleksey", "Smirnov", 25, "Moscow",
                 "AleksSmirnov", "12345", "test@mail.ru",
                 new HashSet<>(Set.of(user)));
+
+        User userAdmin = new User("Admin", "Adminov", 0, "None",
+                "Admin", "12345", "admin@gmail.com",
+                new HashSet<>(Set.of(admin)));
         userService.addUser(userUser);
         userService.addUser(userAdmin);
 
